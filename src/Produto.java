@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.util.List;
 
 public class Produto {
     private String nome;
@@ -10,5 +11,13 @@ public class Produto {
         this.nome = nome;
         this.file = file;
         this.preco = preco;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
     }
 }
