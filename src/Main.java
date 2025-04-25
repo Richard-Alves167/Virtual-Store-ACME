@@ -5,10 +5,10 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        //Tarefa 1
         Cliente cliente1 = new Cliente("Richard");
         Cliente cliente2 = new Cliente("Taylan");
         Cliente cliente3 = new Cliente("Pedro");
-        Cliente cliente4 = new Cliente("Arthur");
 
         Produto produto1 = new Produto("Ariana Grande Albúm Sweetener", Path.of("src","Images","Ariana_Grande_Dangerous_Woman.jpg"),BigDecimal.valueOf(29.99));
         Produto produto2 = new Produto("Ariana Grande Albúm Dangerous Woman", Path.of("src","Images","Ariana_Grande_Dangerous_Woman.jpg"),BigDecimal.valueOf(49.99));
@@ -37,6 +37,13 @@ public class Main {
         pagamentosEfetuados.add(pagamento1);
         pagamentosEfetuados.add(pagamento2);
 
+        //Tarefa 2
+        pagamentosEfetuados.sort(Comparator.comparing(Pagamento::getDataCompra));
         pagamentosEfetuados.forEach(Pagamento::descricaoPagamento);
+
+        //Tarefa 3
+        pagamentosEfetuados.forEach(p -> {
+            System.out.println("Valor Total do Pagamento: " + p.getValorTotalPagamento());
+        });
     }
 }
