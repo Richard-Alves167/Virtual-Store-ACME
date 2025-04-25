@@ -2,6 +2,7 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -43,7 +44,23 @@ public class Main {
 
         //Tarefa 3
         pagamentosEfetuados.forEach(p -> {
-            System.out.println("Valor Total do Pagamento: " + p.getValorTotalPagamento());
+            System.out.println("Valor Total do Pagamento: R$ " + p.getValorTotalPagamento());
         });
+
+        //Tarefa 4
+        Stream<Double> valoresDosPagamentos = pagamentosEfetuados.stream().map(p -> {
+            return p.getValorTotalPagamento();
+        });
+        double valorSomadoDosPagamentos = valoresDosPagamentos.reduce(0.0,(c1,c2) -> {
+            return c1+c2;
+        });
+        System.out.println("Valor total arrecadado pela Loja: R$ "+ Math.floor(valorSomadoDosPagamentos * 100) / 100.0);
+
+        //Tarefa 5
+        System.out.println("Quantidade vendida de cada produto");
+        produto1.quantidadeVendidaDoProduto();
+        produto2.quantidadeVendidaDoProduto();
+        produto3.quantidadeVendidaDoProduto();
+        produto4.quantidadeVendidaDoProduto();
     }
 }

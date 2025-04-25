@@ -38,6 +38,7 @@ public class Pagamento {
 
     public void adicionarProduto(Produto produto) {
         produtos.add(produto);
+        produto.produtoVendido();
         calcularValorTotal();
     }
 
@@ -54,8 +55,8 @@ public class Pagamento {
         System.out.println("Cliente: " + cliente);
         System.out.println("Data do Pagamento: " + dataCompra.format(formatoData));
         System.out.println("* Produtos *");
-        produtos.forEach(pd -> {
-            System.out.println("-> Nome: " + pd.getNome() + " Preço: " + pd.getPreco());
+        produtos.forEach(p -> {
+            System.out.println("-> Nome: " + p.getNome() + " Preço: R$" + p.getPreco());
         });
     }
 

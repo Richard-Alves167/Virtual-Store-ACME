@@ -6,6 +6,7 @@ public class Produto {
     private String nome;
     private Path file;
     private BigDecimal preco;
+    private int quantidadeVendido;
 
     public Produto(String nome, Path file, BigDecimal preco) {
         this.nome = nome;
@@ -20,4 +21,17 @@ public class Produto {
     public BigDecimal getPreco() {
         return preco;
     }
+
+    public int getQuantidadeVendido() {
+        return quantidadeVendido;
+    }
+
+    public void produtoVendido() {
+        quantidadeVendido++;
+    }
+
+    public void quantidadeVendidaDoProduto() {
+        System.out.println("-> " + nome + " : " + quantidadeVendido);
+    }
+
 }
