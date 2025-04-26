@@ -11,6 +11,7 @@ public class Assinatura {
     private LocalDate begin;
     private LocalDate end;
     private long periodoEmMeses;
+    private double pagamentoTotal;
 
     public Assinatura(Cliente cliente, BigDecimal mensalidade, LocalDate begin) {
         this.cliente = cliente;
@@ -42,6 +43,11 @@ public class Assinatura {
         return periodoEmMeses;
     }
 
+    public double getPagamentoTotal() {
+        calcularValorPagoTotal();
+        return pagamentoTotal;
+    }
+
     private void tempoDeAssinatura() {
         Optional<LocalDate> dataEncerrada = Optional.ofNullable(end);
         dataEncerrada.ifPresentOrElse(a -> {
@@ -49,5 +55,9 @@ public class Assinatura {
         }, () -> {
             periodoEmMeses = ChronoUnit.MONTHS.between(begin, LocalDate.now());
         });
+    }
+
+    private void calcularValorPagoTotal() {
+        pagamentoTotal = mensalidade.doubleValue() * periodoEmMeses;
     }
 }

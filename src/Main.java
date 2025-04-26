@@ -98,5 +98,10 @@ public class Main {
                 System.out.println("Assinatura ainda em andamento, contagem de tempo em meses até o momento: " + a.getPeriodoEmMeses());
             });
         });
+
+        //Tarefa 12
+        assinaturas.forEach(a -> {
+            System.out.println("Pagamento total dessa assinatura: R$ " + a.getPagamentoTotal());
+        });
     }
 }
