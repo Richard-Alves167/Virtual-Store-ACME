@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
@@ -45,13 +46,13 @@ public class Main {
         pagamentosEfetuados.forEach(Pagamento::descricaoPagamento);
 
         //Tarefa 3
-        pagamentosEfetuados.forEach(p -> {
-            System.out.println("Valor Total do Pagamento: R$ " + p.getValorTotalPagamento());
+        pagamentosEfetuados.forEach(pagamento -> {
+            System.out.println("Valor Total do Pagamento: R$ " + pagamento.getValorTotalPagamento());
         });
 
         //Tarefa 4
-        Stream<Double> valoresDosPagamentos = pagamentosEfetuados.stream().map(p -> {
-            return p.getValorTotalPagamento();
+        Stream<Double> valoresDosPagamentos = pagamentosEfetuados.stream().map(pagamento -> {
+            return pagamento.getValorTotalPagamento();
         });
         double valorSomadoDosPagamentos = valoresDosPagamentos.reduce(0.0, (c1, c2) -> {
             return c1 + c2;
@@ -66,11 +67,30 @@ public class Main {
         produto4.quantidadeVendidaDoProduto();
 
         //Tarefa 6
-
+        Map<String, List<Produto>> mapaClienteProdutos = new HashMap<>();
+        pagamentosEfetuados.forEach(pagamento -> {
+            mapaClienteProdutos.merge(pagamento.getCliente().getNome(), new ArrayList<>(pagamento.getProdutos()), (existente, novo) -> {
+                existente.addAll(novo);
+                return existente;
+            });
+        });
         //Tarefa 7
+        Pagamento maior = pagamentosEfetuados.stream().max(Comparator.comparing(Pagamento::getValorTotalPagamento)).orElseThrow();
+        System.out.println("Cliente que mais gastou: " + maior.getCliente()+" e o preço total de R$ " + String.format("%.2f",maior.getValorTotalPagamento()));
 
         //Tarefa 8
+//        Map<Integer, BigDecimal> porMes = pagamentosEfetuados.stream()
+//                .collect(Collectors.groupingBy(pagamento -> pagamento.getDataCompra().getMonthValue(),
+//                        Collectors.mapping(Pagamento::getValorTotalPagamento, Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+        Map<Integer, Double> porMes = pagamentosEfetuados.stream()
+                .filter(pagamento -> pagamento.getDataCompra() != null)
+                .collect(Collectors.groupingBy(
+                        pagamento -> pagamento.getDataCompra().getMonthValue(),
+                        Collectors.summingDouble(pagamento -> Optional.ofNullable(pagamento.getValorTotalPagamento()).orElse(0.0))
+                ));
 
+        System.out.println("Faturamento por mês:");
+        porMes.forEach((mes, total) -> System.out.println("Mês "+mes+": R$ " + String.format("%.2f",total)));
         //Tarefa 9
         Assinatura assinatura1 = new Assinatura(cliente1, BigDecimal.valueOf(99.98), LocalDate.of(2025, 1, 4));
         Assinatura assinatura2 = new Assinatura(cliente2, BigDecimal.valueOf(99.98), LocalDate.of(2023, 3, 4), LocalDate.of(2024, 7, 4));
@@ -82,26 +102,26 @@ public class Main {
         assinaturas.add(assinatura3);
 
         //Tarefa 10
-        assinaturas.forEach(a -> {
-            Optional<LocalDate> assinaturaEncerrada = Optional.ofNullable(a.getEnd());
+        assinaturas.forEach(assinatura -> {
+            Optional<LocalDate> assinaturaEncerrada = Optional.ofNullable(assinatura.getEnd());
             if (assinaturaEncerrada.isEmpty()) {
-                System.out.println("Assinatura ainda em andamento, contagem de tempo em meses até o momento: " + a.getPeriodoEmMeses());
+                System.out.println("Assinatura de " + assinatura.getCliente().getNome() +" ainda em andamento, contagem de tempo em meses até o momento: " + assinatura.getPeriodoEmMeses());
             }
         });
 
         //Tarefa 11
-        assinaturas.forEach(a -> {
-            Optional<LocalDate> assinaturaEncerrada = Optional.ofNullable(a.getEnd());
+        assinaturas.forEach(assinatura -> {
+            Optional<LocalDate> assinaturaEncerrada = Optional.ofNullable(assinatura.getEnd());
             assinaturaEncerrada.ifPresentOrElse(d -> {
-                System.out.println("Assinatura finalizada, tempo em meses da assinatura: " + a.getPeriodoEmMeses());
+                System.out.println("Assinatura de " + assinatura.getCliente().getNome() + " finalizada, tempo em meses da assinatura: " + assinatura.getPeriodoEmMeses());
             }, () -> {
-                System.out.println("Assinatura ainda em andamento, contagem de tempo em meses até o momento: " + a.getPeriodoEmMeses());
+                System.out.println("Assinatura de " + assinatura.getCliente().getNome() + " ainda em andamento, contagem de tempo em meses até o momento: " + assinatura.getPeriodoEmMeses());
             });
         });
 
         //Tarefa 12
-        assinaturas.forEach(a -> {
-            System.out.println("Pagamento total dessa assinatura: R$ " + a.getPagamentoTotal());
+        assinaturas.forEach(assinatura -> {
+            System.out.println("Pagamento total dessa assinatura: R$ " + assinatura.getPagamentoTotal());
         });
     }
 }

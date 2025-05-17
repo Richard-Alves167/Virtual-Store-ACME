@@ -26,6 +26,9 @@ public class Assinatura {
         this.end = end;
     }
 
+    public Cliente getCliente() {return cliente;}
+
+
     public BigDecimal getMensalidade() {
         return mensalidade;
     }
